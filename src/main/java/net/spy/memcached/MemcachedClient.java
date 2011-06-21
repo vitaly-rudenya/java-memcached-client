@@ -1243,9 +1243,8 @@ public class MemcachedClient extends SpyThread
 			validateKey(key);
 			final MemcachedNode primaryNode=locator.getPrimary(key);
 			MemcachedNode node=null;
-			if(primaryNode.isActive()) {
-				node=primaryNode;
-			} else {
+
+			if(!primaryNode.isActive()) {
 				for(Iterator<MemcachedNode> i=locator.getSequence(key);
 					node == null && i.hasNext();) {
 					MemcachedNode n=i.next();
@@ -1253,11 +1252,12 @@ public class MemcachedClient extends SpyThread
 						node=n;
 					}
 				}
+			}
+
 				if(node == null) {
 					node=primaryNode;
 				}
-			}
-			assert node != null : "Didn't find a node for " + key;
+
 			Collection<String> ks=chunks.get(node);
 			if(ks == null) {
 				ks=new ArrayList<String>();
