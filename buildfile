@@ -66,7 +66,8 @@ define "spymemcached" do
                "org.easymock:easymock:jar:2.4",
                "org.easymock:easymockclassextension:jar:2.4",
                "junit-addons:junit-addons:jar:1.4",
-               "cglib:cglib:jar:2.2.2", "asm:asm:jar:3.3.1"
+               "cglib:cglib:jar:2.2.2", "asm:asm:jar:3.3.1",
+               "org.membase.JMembase:JMembase:jar:1.0-SNAPSHOT"
 
   # Gen build
   gen_build_info "net.spy.memcached", "git"
