@@ -1,5 +1,8 @@
 package net.spy.memcached;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,15 +28,21 @@ public class MultiNodeFailureTest extends TestCase {
 
     public void setUp() throws Exception {
         try {
-            jMembase = new JMembase(8091, 5, 11200, 1, JMembase.BucketType.BASE);
+            jMembase = new JMembase(8091, 5, 1024, JMembase.BucketType.BASE);
             jMembaseRunner = new Thread(jMembase);
+            jMembaseRunner.setDaemon(true);
             jMembaseRunner.start();
 
-            memcachedClient = new MemcachedClient(new BinaryConnectionFactory(){
-            public long getOperationTimeout() {
-                return 100000;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                logger.error(ex);
             }
-        }, AddrUtil.getAddresses("localhost:11200 localhost:11201 localhost:11202 localhost:11203 localhost:11204"));
+
+            List<URI> baselist = new ArrayList<URI>();
+            baselist.add(new URI("http://localhost:8091/pools"));
+
+            memcachedClient = new MemcachedClient(baselist, "default", "Administrator", "password");
         } catch (Exception e) {
             logger.error(e);
             throw e;
