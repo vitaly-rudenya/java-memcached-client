@@ -267,8 +267,10 @@ public class ConfigurationProviderHTTP extends SpyObject implements Configuratio
 		}
 		return buffer.toString();
 	    } finally {
-	    reader.close();
-	}
+        if (reader != null) {
+            reader.close();
+        }
+    }
     }
 
     /**
