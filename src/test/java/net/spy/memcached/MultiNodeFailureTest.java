@@ -50,27 +50,28 @@ public class MultiNodeFailureTest extends TestCase {
     }
 
     public void testNodeFail() throws Exception {
-        memcachedClient.set(OBJ_KEY, 100000, OBJ_KEY);
         try {
             for (int i = 0; i < NUM_OF_LOOPS; i++) {
-                memcachedClient.get(OBJ_KEY);
+                //We need to call set operation we don't have data sync on JMembase
+                memcachedClient.set(OBJ_KEY, 100000, OBJ_KEY);
                 Thread.sleep(LOOP_SLEEP_TIME);
             }
         } catch (Exception e) {
             logger.error(e);
-            fail("Fail during getting data with active nodes");
+            fail("Fail during setting data with active nodes");
         }
 
         jMembase.failSome(50);
 
         try {
             for (int i = 0; i < NUM_OF_LOOPS; i++) {
-                memcachedClient.get(OBJ_KEY);
+                //We need to call set operation we don't have data sync on JMembase
+                memcachedClient.set(OBJ_KEY, 100000, OBJ_KEY);
                 Thread.sleep(LOOP_SLEEP_TIME);
             }
         } catch (Exception e) {
             logger.error(e);
-            fail("Fail during getting data with 50% non active nodes");
+            fail("Fail during setting data with 50% non active nodes");
         }
     }
 
