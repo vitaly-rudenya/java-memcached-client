@@ -18,7 +18,7 @@ import org.membase.jmembase.JMembase;
  * Date: 22.06.11
  * Time: 08:49
  */
-public class MultiNodeFailureTest extends TestCase {
+public abstract class AbstractMultiNodeFailure extends TestCase {
 
     private static final String OBJ_KEY = "blah1";
     private static final String BASE_LIST_URL = "http://localhost:8091/pools";
@@ -41,9 +41,11 @@ public class MultiNodeFailureTest extends TestCase {
 
     private Log logger = LogFactory.getLog(this.getClass());
 
+    protected abstract JMembase.BucketType getBucketType();
+
     public void setUp() throws Exception {
         try {
-            jMembase = new JMembase(8091, 5, 1024, JMembase.BucketType.BASE);
+            jMembase = new JMembase(8091, 5, 1024, getBucketType());
             jMembaseRunner = new Thread(jMembase);
             jMembaseRunner.setDaemon(true);
             jMembaseRunner.start();
