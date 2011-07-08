@@ -75,7 +75,7 @@ public abstract class AbstractMultiNodeFailure extends TestCase {
         failPrimaryNode();
 
         try {
-            memcachedClient.get(OBJ_KEY);
+            memcachedClient.set(OBJ_KEY, 100000, OBJ_KEY);
         } catch (Exception e) {
             logger.error(e);
             fail("Fail during getting data with 50% non active nodes");
@@ -100,10 +100,10 @@ public abstract class AbstractMultiNodeFailure extends TestCase {
         memcachedClient.reconfigure(bucket);
 
         try {
-            memcachedClient.get(OBJ_KEY);
+            memcachedClient.set(OBJ_KEY, 100000, OBJ_KEY);
         } catch (Exception e) {
             logger.error(e);
-            fail("Fail during getting after bucket reconfiguration");
+            fail("Fail during getting data after bucket reconfiguration");
         }
     }
 
